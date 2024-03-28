@@ -3,11 +3,8 @@ import pytz as pytz
 from flask import Flask, request, jsonify, make_response
 
 import config
-import json
-flask_app = Flask(__name__)
-application = flask_app
+app = Flask(__name__)
 import mysql.connector
-import requests
 
 def validate_api(token):
     if token not in config.config['x-api-key']:
@@ -24,8 +21,8 @@ def find_contact(email, phone_number, contacts):
                 returnObject.append(contact)
     returnObject = sorted(returnObject, key=lambda x: x['id'])
     return returnObject
-@flask_app.route("/api/v1/identify", methods=["POST", "OPTIONS"])
-def api_allapplications_insert():
+@app.route("/api/v1/identify", methods=["POST", "OPTIONS"])
+def api_identify():
     if request.method == "OPTIONS": # CORS preflight
         return _build_cors_preflight_response()
     elif request.method == "POST":
@@ -134,6 +131,34 @@ def api_allapplications_insert():
             print (e)
             return _corsify_actual_response(jsonify({'response': 'failure', 'message': 'Internal Server Error'})), 500
 
+@app.route("/api/v1/truncate", methods=["DELETE", "OPTIONS"])
+def api_truncate():
+    if request.method == "OPTIONS": # CORS preflight
+        return _build_cors_preflight_response()
+    elif request.method == "DELETE":
+        # Check if API key present
+        if 'Authorization' not in request.headers:
+            return _corsify_actual_response(jsonify({'response': 'failure', 'message': 'API Key Required'})), 401
+
+        # Check if API key is valid
+        if validate_api(request.headers['Authorization'].split(' ')[1]) == 401:
+            return _corsify_actual_response(jsonify({'response': 'failure', 'message': 'In-valid Token'})), 401
+        try:
+            # database connection
+            mydb = mysql.connector.connect(host=config.config['dbHost'], user=config.config['dbUser'], password=config.config['dbPassword'], database=config.config['dbName'])
+            mycursor = mydb.cursor(dictionary=True)
+
+            # truncate query
+            mycursor.execute("TRUNCATE TABLE Contact")
+            mydb.commit()
+            mycursor.close()
+            mydb.close()
+            return _corsify_actual_response(jsonify({'response': 'success'})), 201
+        except Exception as e:
+            # store error in log and return 500
+            print (e)
+            return _corsify_actual_response(jsonify({'response': 'failure', 'message': 'Internal Server Error'})), 500
+
 
 def _build_cors_preflight_response():
     response = make_response()
@@ -148,4 +173,4 @@ def _corsify_actual_response(response):
 
 
 if __name__ == '__main__':
-    flask_app.run(host= '0.0.0.0',port=678, debug=True)
+    app.run(host= '0.0.0.0',port=678, debug=True)

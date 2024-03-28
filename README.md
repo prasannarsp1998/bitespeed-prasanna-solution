@@ -18,7 +18,7 @@ The solution is implemented using Python Flask and is available in the main.py f
 ## How to Use
 1. Install Postman or any other API testing tool. 
 2. An API key is required and should be passed as a Bearer Token in the Authorization header with the key ```Authorization``` and value Bearer ```r3PJdg$j8>1d0n!d:B#Oh.2KAsiMO7/!!~ZH^Wn6lp+qW9Trkc```.
-3. Send a POST request to http://3.6.99.106/identify with the JSON body as specified in the problem statement.
+3. Send a POST request to http://3.6.99.106/api/v1/identify with the JSON body as specified in the problem statement.
 4. The response will be in JSON format as described in the problem statement.
 
 ## Features Covered
