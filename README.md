@@ -34,11 +34,7 @@ The solution is implemented using Python Flask and is available in the main.py f
    * URL - https://933032009873.signin.aws.amazon.com/console
    * Username - Bitespeed_Prasanna
    * Password - wI25G6{)
-1. EC2 Console Login
-   * IP - 3.6.99.106
-   * Username - bitespeed_prasanna
-   * Password - wI25G6{)
-3. MySQL Credentials
+2. MySQL Credentials
    * IP - 3.6.99.106
    * Username - remote-user
    * Password - Th@!!11@m
