@@ -1,5 +1,5 @@
 config = {
-    "dbHost": "3.6.99.106",
+    "dbHost": "13.201.109.59",
     "dbUser": "remote-user",
     "dbPassword": "Th@!!11@m",
     "dbName": "bitespeed",

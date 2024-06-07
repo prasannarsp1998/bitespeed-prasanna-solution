@@ -130,7 +130,12 @@ def api_identify():
             # store error in log and return 500
             print (e)
             return _corsify_actual_response(jsonify({'response': 'failure', 'message': 'Internal Server Error'})), 500
-
+@app.route("/api/v1/health_check", methods=["GET", "OPTIONS"])
+def api_health_check():
+    if request.method == "OPTIONS": # CORS preflight
+        return _build_cors_preflight_response()
+    elif request.method == "GET":
+        return _corsify_actual_response(jsonify({'response': 'success'})), 201
 @app.route("/api/v1/truncate", methods=["DELETE", "OPTIONS"])
 def api_truncate():
     if request.method == "OPTIONS": # CORS preflight
